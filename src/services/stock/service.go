@@ -7,23 +7,25 @@ import (
 	"stock-go-sql-rest-api/src/types"
 )
 
-func (s *Store) InsertStock(stock types.Stock) error {
-	_, err := s.db.Exec(
-		"INSERT INTO stocks (name, price, company) VALUES ($1, $2, $3)",
-		stock.Name,
-		stock.Price,
-		stock.Company,
-	)
+func (s *Store) InsertStock(stock types.Stock) (int64, error) {
+	// Inserted ID
+	var id int64
+
+	// Query
+	query := "INSERT INTO stocks (name, price, company) VALUES ($1, $2, $3) RETURNING stockid"
+	err := s.db.QueryRow(query, stock.Name, stock.Price, stock.Company).Scan(&id)
 
 	if err != nil {
-		return err
+		return id, err
 	} else {
-		return nil
+		return id, err
 	}
 }
 
 func (s *Store) GetStockByID(id int) (*types.Stock, error) {
-	rows, err := s.db.Query("SELECT * FROM stocks WHERE stockid = $1", id)
+	// Query
+	query := "SELECT * FROM stocks WHERE stockid = $1"
+	rows, err := s.db.Query(query, id)
 	if err != nil {
 		return nil, err
 	}
@@ -61,14 +63,10 @@ func (s *Store) GetAllStocks() ([]*types.Stock, error) {
 	return stocks, err
 }
 
-func (s *Store) UpdateStockByID(id int, stock types.Stock) (int64, error) {
-	result, err := s.db.Exec(
-		"UPDATE stocks SET name= $1, price= $2, company= $3 WHERE stockid = $4",
-		stock.Name,
-		stock.Price,
-		stock.Company,
-		stock.StockID,
-	)
+func (s *Store) UpdateStockByID(stock types.Stock) (int64, error) {
+	// Query
+	query := "UPDATE stocks SET name= $2, price= $3, company= $4 WHERE stockid = $1"
+	result, err := s.db.Exec(query, stock.StockID, stock.Name, stock.Price, stock.Company)
 	if err != nil {
 		log.Fatalf("Unable to Execute the Query, %v", err)
 	}
@@ -82,7 +80,9 @@ func (s *Store) UpdateStockByID(id int, stock types.Stock) (int64, error) {
 }
 
 func (s *Store) DeleteStockByID(id int) (int64, error) {
-	result, err := s.db.Exec("DELETE FROM stocks WHERE stockid = $1", id)
+	// Query
+	query := "DELETE FROM stocks WHERE stockid = $1"
+	result, err := s.db.Exec(query, id)
 	if err != nil {
 		log.Fatalf("Unable to Execute the Query, %v", err)
 	}

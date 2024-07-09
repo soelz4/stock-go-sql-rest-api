@@ -10,9 +10,9 @@ type Stock struct {
 
 // Stock Storage
 type StockStore interface {
-	InsertStock(Stock) error
+	InsertStock(Stock) (int64, error)
 	GetStockByID(id int) (*Stock, error)
 	GetAllStocks() ([]*Stock, error)
-	UpdateStockByID(id int, stock Stock) (int64, error)
+	UpdateStockByID(Stock) (int64, error)
 	DeleteStockByID(id int) (int64, error)
 }
