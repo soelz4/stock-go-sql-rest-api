@@ -19,10 +19,12 @@ func (h *Handler) handleCreateStock(w http.ResponseWriter, r *http.Request) {
 		utils.WriteError(w, http.StatusBadRequest, err)
 	}
 
-	err = h.store.InsertStock(stock)
+	id, err := h.store.InsertStock(stock)
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 	}
+
+	stock.StockID = int64(id)
 
 	utils.WriteJSON(w, http.StatusOK, stock)
 }
@@ -57,16 +59,16 @@ func (h *Handler) handleGetAllStock(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *Handler) handleUpdateStockByID(w http.ResponseWriter, r *http.Request) {
-	var stock types.Stock
-	err := utils.ParseJSON(r, &stock)
-	if err != nil {
-		utils.WriteError(w, http.StatusBadRequest, err)
-	}
-
 	vars := mux.Vars(r)
 	id, ok := vars["id"]
 	if !ok {
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("missing stock id"))
+	}
+
+	var stock types.Stock
+	err := utils.ParseJSON(r, &stock)
+	if err != nil {
+		utils.WriteError(w, http.StatusBadRequest, err)
 	}
 
 	stockID, err := strconv.Atoi(id)
@@ -74,7 +76,9 @@ func (h *Handler) handleUpdateStockByID(w http.ResponseWriter, r *http.Request) 
 		utils.WriteError(w, http.StatusBadRequest, fmt.Errorf("invalid stock id"))
 	}
 
-	rowsAffected, err := h.store.UpdateStockByID(stockID, stock)
+	stock.StockID = int64(stockID)
+
+	rowsAffected, err := h.store.UpdateStockByID(stock)
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err)
 	}
