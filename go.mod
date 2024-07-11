@@ -1,6 +1,6 @@
 module stock-go-sql-rest-api
 
-go 1.22.4
+go 1.22.3
 
 require (
 	github.com/golang-migrate/migrate/v4 v4.17.1 // indirect
