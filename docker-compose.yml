@@ -1,0 +1,31 @@
+---
+services:
+  golang-book-management-system-sql-crud-api:
+    container_name: sgsra
+    image: soelz/stock-go-sql-rest-api:0.1
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    init: true
+    depends_on:
+      - db
+    networks:
+      - backend
+    ports:
+      - 9010:9010
+    restart: unless-stopped
+  db:
+    container_name: db
+    image: postgres:alpine3.18
+    environment:
+      - POSTGRES_USER=sz
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=stock
+    networks:
+      - backend
+    ports:
+      - 5432:5432
+networks:
+  backend:
+    name: backend
+    external: true
