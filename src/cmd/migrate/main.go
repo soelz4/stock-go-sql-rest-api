@@ -28,6 +28,7 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// Migrations Location
 	m, err := migrate.NewWithDatabaseInstance(
 		"file://src/cmd/migrate/migrations",
 		"postgres",
