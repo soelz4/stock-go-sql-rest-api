@@ -11,6 +11,7 @@ import (
 	"stock-go-sql-rest-api/src/utils"
 )
 
+// Handle Create Stock
 func (h *Handler) handleCreateStock(w http.ResponseWriter, r *http.Request) {
 	var stock types.Stock
 
@@ -29,6 +30,7 @@ func (h *Handler) handleCreateStock(w http.ResponseWriter, r *http.Request) {
 	utils.WriteJSON(w, http.StatusOK, stock)
 }
 
+// Handle GET Stock By ID
 func (h *Handler) handleGetStockByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, ok := vars["id"]
@@ -49,6 +51,7 @@ func (h *Handler) handleGetStockByID(w http.ResponseWriter, r *http.Request) {
 	utils.WriteJSON(w, http.StatusOK, stock)
 }
 
+// Handle All Stocks
 func (h *Handler) handleGetAllStock(w http.ResponseWriter, r *http.Request) {
 	stocks, err := h.store.GetAllStocks()
 	if err != nil {
@@ -58,6 +61,7 @@ func (h *Handler) handleGetAllStock(w http.ResponseWriter, r *http.Request) {
 	utils.WriteJSON(w, http.StatusOK, stocks)
 }
 
+// Handle Update Stock By ID
 func (h *Handler) handleUpdateStockByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, ok := vars["id"]
@@ -90,6 +94,7 @@ func (h *Handler) handleUpdateStockByID(w http.ResponseWriter, r *http.Request) 
 	)
 }
 
+// Handle Delete Stock By ID
 func (h *Handler) handleDeleteStockByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, ok := vars["id"]
