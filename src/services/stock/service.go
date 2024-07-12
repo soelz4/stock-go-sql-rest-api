@@ -7,6 +7,7 @@ import (
 	"stock-go-sql-rest-api/src/types"
 )
 
+// Insert Stock into DataBase
 func (s *Store) InsertStock(stock types.Stock) (int64, error) {
 	// Inserted ID
 	var id int64
@@ -22,6 +23,7 @@ func (s *Store) InsertStock(stock types.Stock) (int64, error) {
 	}
 }
 
+// GET Stock By ID
 func (s *Store) GetStockByID(id int) (*types.Stock, error) {
 	// Query
 	query := "SELECT * FROM stocks WHERE stockid = $1"
@@ -41,8 +43,9 @@ func (s *Store) GetStockByID(id int) (*types.Stock, error) {
 	return stock, err
 }
 
+// GET All Stocks
 func (s *Store) GetAllStocks() ([]*types.Stock, error) {
-	// SQL Query
+	// Query
 	query := "SELECT * FROM stocks"
 	rows, err := s.db.Query(query)
 	if err != nil {
@@ -63,6 +66,7 @@ func (s *Store) GetAllStocks() ([]*types.Stock, error) {
 	return stocks, err
 }
 
+// Update Stock By ID
 func (s *Store) UpdateStockByID(stock types.Stock) (int64, error) {
 	// Query
 	query := "UPDATE stocks SET name= $2, price= $3, company= $4 WHERE stockid = $1"
@@ -79,6 +83,7 @@ func (s *Store) UpdateStockByID(stock types.Stock) (int64, error) {
 	return rowsAffected, err
 }
 
+// Delete Stock By ID
 func (s *Store) DeleteStockByID(id int) (int64, error) {
 	// Query
 	query := "DELETE FROM stocks WHERE stockid = $1"
@@ -95,6 +100,7 @@ func (s *Store) DeleteStockByID(id int) (int64, error) {
 	return rowsAffected, err
 }
 
+// PUT DataBase Rows into Stock Struct Type
 func scanRowIntoStock(rows *sql.Rows) (*types.Stock, error) {
 	stock := new(types.Stock)
 

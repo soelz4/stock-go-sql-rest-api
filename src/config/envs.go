@@ -7,8 +7,10 @@ import (
 	"github.com/joho/godotenv"
 )
 
+// DataBase URL
 var DB_URL = initConfig()
 
+// GET DataBase URL from .env File
 func initConfig() string {
 	err := godotenv.Load(".env")
 	if err != nil {
@@ -19,6 +21,7 @@ func initConfig() string {
 	return dbURL
 }
 
+// GET Env Variables Func
 func getEnv(key string) string {
 	value, ok := os.LookupEnv(key)
 	if ok {

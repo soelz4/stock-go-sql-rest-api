@@ -21,6 +21,8 @@ func main() {
 	db.InitPostgreSQLStorage(database)
 
 	server := api.NewAPIServer(fmt.Sprintf(":%s", "9010"), database)
+
+	// RUN Server
 	err = server.Run()
 	if err != nil {
 		log.Fatal(err)
